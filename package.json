@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --ext .js --ext .jsx src/",
     "smoke": "node smoke/index.js",
     "test": "istanbul cover ./node_modules/.bin/_mocha",
     "build": "cross-env NODE_ENV=production webpack --progress --colors --config config/webpack.prod.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress --colors --config config/webpack.dev.js --open"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo 'husky' && npm run lint"
+    }
   },
   "keywords": [],
   "author": "",
@@ -32,6 +38,7 @@
     "glob-all": "^3.1.0",
     "html-webpack-externals-plugin": "^3.8.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.0.1",
     "istanbul": "^0.4.5",
     "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.7.0",

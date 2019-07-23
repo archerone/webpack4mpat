@@ -1,0 +1,14 @@
+@font-face{
+    font-family: 'gcss';
+    src: url('../../static/images/fontzt.ttf');
+}
+html{
+    color:red;
+    body{
+        font-size:20px;
+        font-family: 'gcss';
+        div{
+            box-shadow: 1px 1px 1px #000;
+        }
+    }
+}

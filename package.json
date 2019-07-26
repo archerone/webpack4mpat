@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext .js --ext .jsx src/",
+    "lint": "eslint --ext .js src/",
     "smoke": "node smoke/index.js",
     "test": "istanbul cover ./node_modules/.bin/_mocha",
     "build": "cross-env NODE_ENV=production webpack --progress --colors --config config/webpack.prod.js",
@@ -21,6 +21,8 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "assert": "^2.0.0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",

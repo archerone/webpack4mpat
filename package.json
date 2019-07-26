@@ -12,7 +12,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'husky' && npm run lint"
+      "pre-commit": "echo 'husky' && npm run lint",
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
   },
   "keywords": [],
@@ -22,6 +23,7 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-angular": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "assert": "^2.0.0",
     "babel-eslint": "^10.0.2",

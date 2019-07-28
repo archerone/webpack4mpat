@@ -8,12 +8,13 @@
     "smoke": "node smoke/index.js",
     "test": "istanbul cover ./node_modules/.bin/_mocha",
     "build": "cross-env NODE_ENV=production webpack --progress --colors --config config/webpack.prod.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --progress --colors --config config/webpack.dev.js --open"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --progress --colors --config config/webpack.dev.js --open",
+    "build:stats": "webpack --config config/webpack.prod.js --json > stats.json"
   },
   "husky": {
     "hooks": {
       "pre-commit": "echo 'husky' && npm run lint",
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS && conventional-changelog -p angular -i CHANGELOG.md -s"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && conventional-changelog -p angular -i CHANGELOG.md -s -p"
     }
   },
   "keywords": [],

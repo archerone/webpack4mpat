@@ -4,3 +4,4 @@ dist/
 .git
 **/.git
 coverage/
+stats.json

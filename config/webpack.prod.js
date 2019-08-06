@@ -69,5 +69,5 @@ module.exports = merge(baseconfig,{
 		  }
 	},
 	devtool:'cheap-module-source-map',
-	//stats: 'errors-only'
+	stats: 'errors-only'
 })

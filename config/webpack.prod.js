@@ -9,14 +9,32 @@ const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const frienderror = require('friendly-errors-webpack-plugin');
 const projectRoot = process.cwd();
- 
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 
-module.exports = merge(baseconfig,{
+const smp = new SpeedMeasurePlugin();
+
+module.exports = smp.wrap(merge(baseconfig,{
 	output:{
 		path: path.join(projectRoot, 'dist'),
 		filename: '[name]_[chunkhash:8].js'
 	},
 	mode: 'production',
+	module:{
+		rules:[
+			{
+				test: /.js$/,
+				include: path.resolve("src"),
+				use: [
+					{
+						loader:'thread-loader',
+						options:{
+							workers:3
+						}
+					}
+				]
+			}
+		]
+	},
 	plugins:[
 		new BundleAnalyzerPlugin({
             openAnalyzer: false,
@@ -69,5 +87,6 @@ module.exports = merge(baseconfig,{
 		  }
 	},
 	devtool:'cheap-module-source-map',
-	stats: 'errors-only'
-})
+	//stats: 'errors-only'
+}));
+

@@ -3,9 +3,9 @@
 const glob = require('glob');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV === 'development';
+const webpack = require('webpack');
 const projectRoot = process.cwd();
 
 const setMPA = () => {
@@ -51,7 +51,7 @@ module.exports = {
 		rules:[
 			{
 				test: /.js$/,
-				use: ['babel-loader']
+				use: ['babel-loader?cacheDirectory=true']
 			},
 			{
 				test: /\.js$/,
@@ -121,10 +121,18 @@ module.exports = {
 		]
 	},
 	plugins:[
-		new CleanWebpackPlugin(),
 		new MiniCssExtractPlugin({
 			filename:devMode?'[name].css':'[name]_[contenthash:8].css',
 			chunkFilename:devMode?'[id].css':'[id]_[contenthash:8].css'
-		})
-	].concat(htmlWebpackPlugin)
+		}),
+		new webpack.ProvidePlugin({     //不需要import $,可以直接用$
+            $: 'jquery',
+            jQuery: 'jquery'
+		}),
+	].concat(htmlWebpackPlugin),
+	resolve:{
+		
+		extensions:['.js'],
+		mainFields:['main']
+	}
 }

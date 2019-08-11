@@ -1,6 +1,6 @@
 import { helloworld } from './helloworld';
 import utils from '../../util/pa.js';
-document.write(helloworld());
+alert(helloworld());
 utils.pa();
 console.log($('img').length,'ddcd');
 $('body').click(function(){

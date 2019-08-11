@@ -1,7 +1,7 @@
 import { helloworld } from './helloworld';
 import utils from '../../util/pa.js';
 import treesk from '../../util/treesk.js';
-document.write(helloworld());
+alert(helloworld());
 utils.pa();
 console.log($("img").length,'ddcd');
 $('body').click(function(){

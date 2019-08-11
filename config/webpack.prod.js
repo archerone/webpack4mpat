@@ -6,10 +6,13 @@ const merge = require('webpack-merge');
 const baseconfig = require('./webpack.base.js');
 const webpack = require('webpack');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const frienderror = require('friendly-errors-webpack-plugin');
 const projectRoot = process.cwd();
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const smp = new SpeedMeasurePlugin();
 
@@ -48,7 +51,7 @@ module.exports = smp.wrap(merge(baseconfig,{
 		/* new webpack.ProvidePlugin({     //不需要import $,可以直接用$
             $: 'jquery',
             jQuery: 'jquery'
-        }) */
+        }) 
 		new HtmlWebpackExternalsPlugin({   //本地jquery不打包,页面上被添加cdn引用
 			externals:[
 				{
@@ -57,7 +60,15 @@ module.exports = smp.wrap(merge(baseconfig,{
 					global: 'jQuery'
 				}
 			]
+		}),*/
+		new CleanWebpackPlugin({ 
+			cleanOnceBeforeBuildPatterns:['**/*','!build','!build/library','!build/library/*']
 		}),
+		new webpack.DllReferencePlugin({
+			context: __dirname, 
+			manifest: require('../dist/build/library/library.json')
+		}),
+		new HardSourceWebpackPlugin(),
 		new frienderror(),
 		function(){
 			this.hooks.done.tap('done',(stats)=>{
@@ -76,8 +87,8 @@ module.exports = smp.wrap(merge(baseconfig,{
 			chunks: 'all',
 			minSize: 10,
 			minChunks: 2,
-			maxAsyncRequests: 2,
-			maxInitialRequests: 2,
+			maxAsyncRequests: 2,  //按需加载时，并行请求的最大数量，默认是 5
+			maxInitialRequests: 2, //一个入口最大的并行请求数，默认是 3
 			automaticNameDelimiter: '~',
 			name: true,
 			cacheGroups: {
@@ -92,7 +103,13 @@ module.exports = smp.wrap(merge(baseconfig,{
 				reuseExistingChunk: true
 			  }
 			}
-		  }
+		},
+		minimizer: [
+			new TerserPlugin({
+			  parallel: true,
+			  cache: true
+			}),
+		]
 	},
 	devtool:'cheap-module-source-map',
 	//stats: 'errors-only'

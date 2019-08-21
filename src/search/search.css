@@ -1,2 +1,17 @@
 body{background:gray;}
 div{display: flex;}
+.fonsiz{
+    composes:border_c from "./color.css";
+    font-size: 40px;
+}
+.red{ 
+    composes:fonsiz;
+    color:red;
+}
+::placeholder{
+    color:red;
+}
+.img{
+    composes:border_c from "./color.css";
+}
+.mbbb{color:blue;}

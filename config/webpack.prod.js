@@ -1,5 +1,6 @@
 'use strict';
 
+const glob = require('glob');
 const path = require('path');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const merge = require('webpack-merge');
@@ -13,13 +14,19 @@ const projectRoot = process.cwd();
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const smp = new SpeedMeasurePlugin();
+
+const PATHS = {
+	src: path.join(projectRoot, 'src')
+}
 
 module.exports = smp.wrap(merge(baseconfig,{
 	output:{
 		path: path.join(projectRoot, 'dist'),
-		filename: '[name]_[chunkhash:8].js'
+		filename: '[name]_[chunkhash:8].js',
+		//chunkFilename: 'js/[chunkhash:8].chunk.js'
 	},
 	mode: 'production',
 	module:{
@@ -47,7 +54,7 @@ module.exports = smp.wrap(merge(baseconfig,{
 		new OptimizeCSSAssetsPlugin({   //css压缩
 			assetNameRegExp: /\.css$/g,
 			cssProcessor: require('cssnano')
-		}),
+		}), 
 		/* new webpack.ProvidePlugin({     //不需要import $,可以直接用$
             $: 'jquery',
             jQuery: 'jquery'
@@ -69,6 +76,9 @@ module.exports = smp.wrap(merge(baseconfig,{
 			manifest: require('../dist/build/library/library.json')
 		}),
 		new HardSourceWebpackPlugin(),
+		// new PurgecssPlugin({
+		// 	paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
+		// }),
 		new frienderror(),
 		function(){
 			this.hooks.done.tap('done',(stats)=>{
@@ -87,8 +97,8 @@ module.exports = smp.wrap(merge(baseconfig,{
 			chunks: 'all',
 			minSize: 10,
 			minChunks: 2,
-			maxAsyncRequests: 2,  //按需加载时，并行请求的最大数量，默认是 5
-			maxInitialRequests: 2, //一个入口最大的并行请求数，默认是 3
+			maxAsyncRequests: 5,  //按需加载时，并行请求的最大数量，默认是 5
+			maxInitialRequests: 3, //一个入口最大的并行请求数，默认是 3
 			automaticNameDelimiter: '~',
 			name: true,
 			cacheGroups: {

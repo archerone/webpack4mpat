@@ -8,6 +8,7 @@ const devMode = process.env.NODE_ENV === 'development';
 const webpack = require('webpack');
 const projectRoot = process.cwd();
 
+
 const setMPA = () => {
 	const entry = {};
 	const htmlWebpackPlugin = [];
@@ -66,13 +67,13 @@ module.exports = {
 				test: /.(sc|sa|c)ss$/,
 				use: [
 					{
-						//loader: 'style-loader'
-						loader:MiniCssExtractPlugin.loader
+						loader:devMode ? 'style-loader' : MiniCssExtractPlugin.loader
 					},
 					{
 						loader: 'css-loader',
 						options:{
-							sourceMap:true
+							sourceMap:true,
+							modules:true
 						}
 					},
 					{
@@ -102,7 +103,7 @@ module.exports = {
 						loader: 'url-loader',
 						options: {
 							limit:10240,
-							name: devMode?'[name].[ext]':'[name]_[contenthash:8].[ext]'
+							name: devMode?'[path][name].[ext]':'[path][name]_[contenthash:8].[ext]'
 						}
 					}
 				]
@@ -113,7 +114,7 @@ module.exports = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: devMode?'[name].[ext]':'[name]_[contenthash:8].[ext]'
+							name: devMode?'[path][name].[ext]':'[path][name]_[contenthash:8].[ext]'
 						}
 					}
 				]
@@ -123,7 +124,7 @@ module.exports = {
 	plugins:[
 		new MiniCssExtractPlugin({
 			filename:devMode?'[name].css':'[name]_[contenthash:8].css',
-			chunkFilename:devMode?'[id].css':'[id]_[contenthash:8].css'
+			//chunkFilename:devMode?'[id].css':'[id]_[contenthash:8].css'
 		}),
 		new webpack.ProvidePlugin({     //不需要import $,可以直接用$
             $: 'jquery',
@@ -131,8 +132,8 @@ module.exports = {
 		}),
 	].concat(htmlWebpackPlugin),
 	resolve:{
-		
-		extensions:['.js'],
-		mainFields:['main']
+		//modules: [path.resolve(__dirname,'./node-modules')],
+		//extensions:['.js'],
+		//mainFields:['main']
 	}
 }

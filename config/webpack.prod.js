@@ -82,6 +82,7 @@ module.exports = smp.wrap(merge(baseconfig,{
 		new frienderror(),
 		function(){
 			this.hooks.done.tap('done',(stats)=>{
+				console.log('build===================');
 				if(stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watch')==-1){
 					console.log('build error');
 					process.exit(110);
